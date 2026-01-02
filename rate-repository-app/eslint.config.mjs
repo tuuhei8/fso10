@@ -16,7 +16,7 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([{
-    extends: compat.extends("eslint:recommended", "plugin:react/recommended"),
+    extends: compat.extends("eslint:recommended", "plugin:react/recommended", "plugin:jest/recommended"),
 
     plugins: {
         react,
@@ -37,8 +37,11 @@ export default defineConfig([{
         },
     },
 
+    files: ["**/*.js", "**/*.jsx"],
+
     rules: {
         "react/prop-types": "off",
         "react/react-in-jsx-scope": "off",
+        semi: "error",
     },
 }]);
