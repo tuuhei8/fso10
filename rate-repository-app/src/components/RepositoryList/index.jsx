@@ -1,13 +1,9 @@
-import { FlatList, View, StyleSheet } from 'react-native';
-import RepositoryItem from './RepositoryItem';
-import useRepositories from '../hooks/useRepositories';
-import Text from './Text';
-
-const styles = StyleSheet.create({
-  separator: {
-    height: 10,
-  },
-});
+import useRepositories from '../../hooks/useRepositories';
+import Text from '../Text';
+import RepositoryListContainer from './RepositoryListContainer';
+import { useNavigate } from 'react-router-native';
+import { useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 /*
 const repositories = [
@@ -58,34 +54,34 @@ const repositories = [
 ];
 */
 
-const ItemSeparator = () => <View style={styles.separator} />;
-
 const RepositoryList = () => {
-  const { data, error, loading } = useRepositories();
-
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
+  const navigate = useNavigate();
+  const [order, setOrder] = useState('latest');
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [debouncedKeyword] = useDebounce(searchKeyword, 500);
+  const first = 8;
+  const { repositories, error, fetchMore } = useRepositories(order, debouncedKeyword, first);
 
   if (error) {
     // eslint-disable-next-line no-undef
-    console.log('Error: ', error);
-    return <Text>Error.</Text>;
+    console.log('Error in RepositoryList component: ', error);
+    return <Text>Error in RepositoryList component.</Text>;
   }
 
-  const repositories = data.repositories;
-
-  // Get the nodes from the edges array
-  const repositoryNodes = repositories
-    ? repositories.edges.map(edge => edge.node)
-    : [];
+  const onEndReach = () => {
+    // eslint-disable-next-line no-undef
+    console.log('You have reached the end of the list');
+    fetchMore();
+  };
 
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({item}) => <RepositoryItem item={item} />}
-      keyExtractor={item => item.id}
+    <RepositoryListContainer repositories={repositories} 
+      navigate={navigate}
+      order={order} 
+      setOrder={setOrder} 
+      searchKeyword={searchKeyword} 
+      setSearchKeyword={setSearchKeyword}
+      onEndReach={onEndReach}
     />
   );
 };

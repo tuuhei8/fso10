@@ -3,6 +3,11 @@ import Constants from 'expo-constants';
 import AppBarTab from './AppBarTab';
 import theme from '../../theme';
 import { useQuery } from '@apollo/client/react';
+import SignUpTab from './SignUpTab';
+import { useEffect, useState } from 'react';
+import SignInOrOutTab from './SignInOrOutTab';
+import CreateReviewTab from './CreateReviewTab';
+import MyReviewsTab from './MyReviewsTab';
 
 import { ME } from '../../graphql/queries';
 
@@ -23,20 +28,23 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
-  let signTabText;
+  const [user, setUser] = useState(false);
   const { error, data } = useQuery(ME);
 
   if (error) {
+    // eslint-disable-next-line no-undef
     console.log(error);
   }
 
-  if (data) {
-    if (data.me) {
-      signTabText = 'Sign out';
-    } else {
-      signTabText = 'Sign in';
+  useEffect(() => {
+    if (data) {
+      if (data.me) {
+        setUser(true);
+      } else {
+        setUser(false);
+      }
     }
-  }
+  }, [data]);
 
   return (
   <View style={styles.container}>
@@ -44,8 +52,11 @@ const AppBar = () => {
       <View style={styles.flexItemB} >
         <AppBarTab text='Repositories' path='/' />
       </View>
+      <CreateReviewTab user={user} style={styles.flexItemB} />
+      <MyReviewsTab user={user} style={styles.flexItemB} />
+      <SignUpTab user={user} style={styles.flexItemB} />
       <View style={styles.flexItemB} >
-        <AppBarTab text={signTabText} path='/signIn' />
+        <SignInOrOutTab user={user} />
       </View>
     </ScrollView>
   </View>

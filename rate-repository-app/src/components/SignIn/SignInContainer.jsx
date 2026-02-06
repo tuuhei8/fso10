@@ -1,10 +1,8 @@
 import { TextInput, Pressable, View, StyleSheet } from 'react-native';
-import Text from './Text';
+import Text from '../Text';
 import { useFormik } from 'formik';
-import theme from '../theme';
+import theme from '../../theme';
 import * as yup from 'yup';
-import useSignIn from '../hooks/useSignIn';
-import { useNavigate } from 'react-router';
 
 const styles = StyleSheet.create({
   container: {
@@ -65,7 +63,7 @@ const initialValues = {
   password: '',
 };
 
-const SignInForm = ({ onSubmit }) => {
+const SignInContainer = ({ onSubmit, errorMessage }) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -93,6 +91,7 @@ const SignInForm = ({ onSubmit }) => {
        {formik.touched.password && formik.errors.password && (
         <Text style={{ color: 'red' }}>{formik.errors.password}</Text>
       )}
+      <Text style={{ color: 'red' }}>{errorMessage}</Text>
       <Pressable onPress={formik.handleSubmit} style={styles.button}>
         <Text color='whiteText'>Sign in</Text>
       </Pressable>
@@ -100,23 +99,4 @@ const SignInForm = ({ onSubmit }) => {
   );
 };
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const navigate = useNavigate();
-
-  const onSubmit = async (values) => {
-    const { username, password } = values;
-
-    try {
-      const { data } = await signIn({ username, password });
-      console.log(data);
-      navigate(-1);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  return <SignInForm onSubmit={onSubmit} />;
-};
-
-export default SignIn;
+export default SignInContainer;

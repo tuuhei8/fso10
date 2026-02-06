@@ -1,4 +1,4 @@
-import Text from "./Text";
+import Text from "../Text";
 
 const Statistic = ({ number, type }) => {
   if (number >= 1000) {
