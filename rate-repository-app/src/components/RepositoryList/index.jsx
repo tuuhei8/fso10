@@ -69,8 +69,6 @@ const RepositoryList = () => {
   }
 
   const onEndReach = () => {
-    // eslint-disable-next-line no-undef
-    console.log('You have reached the end of the list');
     fetchMore();
   };
 
