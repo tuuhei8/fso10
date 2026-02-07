@@ -1,7 +1,6 @@
 import { View } from "react-native";
 import AppBarTab from "./AppBarTab";
 
-
 const SignUpTab = ({ user, style }) => {
   if (user) {
     return null;

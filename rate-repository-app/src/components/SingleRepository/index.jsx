@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryInfo = ({ repository }) => {
-
   return <RepositoryItem item={repository} />;
 };
 

@@ -62,8 +62,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
 const MyReviewItem = ({ review, refetch }) => {
   const date = format(new Date(review.createdAt), 'dd.MM.yyyy');
   const navigate = useNavigate();

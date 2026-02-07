@@ -124,11 +124,9 @@ const SignUp = () => {
 
   const onSumbit = async (values) => {
     const { username, password } = values;
-    console.log(username, password)
 
     try {
-      const response = await signUp({ username, password });
-      console.log(response)
+      await signUp({ username, password });
       await signIn({ username, password });
       navigate('/');
     } catch (e) {
